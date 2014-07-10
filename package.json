@@ -1,6 +1,6 @@
 {
   "name": "ZichtSass",
-  "version": "0.0.2",
+  "version": "1.0.0-alpha.1",
   "description": "Wrapper for node-sass",
   "main": "index.js",
   "dependencies": {
