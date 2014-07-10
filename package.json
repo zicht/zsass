@@ -1,7 +1,7 @@
 {
   "name": "ZichtSass",
   "version": "0.0.2",
-  "description": "Wrapper for libsass",
+  "description": "Wrapper for node-sass",
   "main": "index.js",
   "dependencies": {
     "node-watch": "^0.3.4",
@@ -9,11 +9,11 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "No test"
   },
   "repository": {
     "type": "git",
-    "url": "git@dev3:~/public_html/ZichtSass"
+    "url": "git@dev3:public_html/ZichtNodeSassWatch"
   },
   "author": "Joppe Aarts",
   "license": "MIT"
