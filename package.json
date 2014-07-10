@@ -5,7 +5,7 @@
   "main": "./index.js",
   "bin": {
       "node-sass-watch": "./bin/node-sass-watch"
-  }
+  },
   "dependencies": {
     "node-watch": "^0.3.4",
     "node-sass": "^0.9.3"
