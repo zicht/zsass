@@ -2,15 +2,15 @@
   "name": "ZichtNodeSassWatch",
   "version": "1.0.0-alpha.1",
   "description": "Wrapper for node-sass",
-  "main": "index.js",
+  "main": "./index.js",
+  "bin": {
+      "node-sass-watch": "./bin/node-sass-watch"
+  }
   "dependencies": {
     "node-watch": "^0.3.4",
     "node-sass": "^0.9.3"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "No test"
-  },
   "repository": {
     "type": "git",
     "url": "git@dev3:public_html/ZichtNodeSassWatch"

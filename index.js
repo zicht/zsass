@@ -1,5 +1,3 @@
-#!/usr/local/bin/node
-
 /*global require, process*/
 
 (function () {
