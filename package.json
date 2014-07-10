@@ -1,5 +1,5 @@
 {
-  "name": "ZichtSass",
+  "name": "ZichtNodeSassWatch",
   "version": "1.0.0-alpha.1",
   "description": "Wrapper for node-sass",
   "main": "index.js",
