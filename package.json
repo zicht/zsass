@@ -2,7 +2,7 @@
   "name": "ZichtNodeSassWatch",
   "version": "1.0.0-alpha.2",
   "description": "Wrapper for node-sass",
-  "main": "./index.js",
+  "main": "./main.js",
   "bin": {
       "node-sass-watch": "./bin/node-sass-watch"
   },
