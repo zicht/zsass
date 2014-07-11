@@ -78,7 +78,7 @@ compileFiles = function (sassDir, cssDir) {
     var cwd = process.cwd(),
         files;
 
-    sassDir = cwd + '/' +  sassDir;
+    sassDir = cwd + '/' + sassDir;
     cssDir = cwd + '/' + cssDir;
 
     files = getFiles(sassDir, function (value) {
@@ -102,6 +102,8 @@ module.exports = (function () {
          */
         watch: function (sassDir, cssDir) {
             var watch = require('node-watch');
+
+            compileFiles(sassDir, cssDir);
 
             watch(sassDir, function () {
                 compileFiles(sassDir, cssDir);

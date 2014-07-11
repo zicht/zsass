@@ -1,5 +1,10 @@
 /*global require, process*/
 
+/**
+ * @author Joppe Aarts <joppe@zicht.nl>
+ * @copyright Zicht Online <http://zicht.nl>
+ */
+
 (function () {
     'use strict';
 
@@ -24,13 +29,30 @@
         return val;
     };
 
-    (function (mode, sassDir, cssDir) {
-        var sass = require('./sass/sass');
+    (function () {
+        var mode,
+            sassDir,
+            cssDir,
+            sass = require('./sass/sass');
 
-        if ('watch' === mode) {
-            sass.watch(sassDir, cssDir);
-        } else if ('update' === mode) {
-            sass.update(sassDir, cssDir);
+        if (process.argv.length < 3) {
+            console.log('Too few paramaters');
+        } else {
+            if (process.argv.length < 4) {
+                mode = 'update';
+                sassDir = getArgument(1);
+                cssDir = getArgument(2);
+            } else {
+                mode = getArgument(1);
+                sassDir = getArgument(2);
+                cssDir = getArgument(3);
+            }
+
+            if ('watch' === mode) {
+                sass.watch(sassDir, cssDir);
+            } else if ('update' === mode) {
+                sass.update(sassDir, cssDir);
+            }
         }
-    }(getArgument(1), getArgument(2), getArgument(3)));
+    }());
 }());
