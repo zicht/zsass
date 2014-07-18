@@ -1,5 +1,9 @@
 # Zicht node sass watch
 
 ## Commands
-node-sass-watch update sass style
-node-sass-watch watch sass style
+Update sass dir
+zsass sass style
+zsass update sass style
+
+Watch sass dir
+zsass watch sass style
