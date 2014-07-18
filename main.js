@@ -50,7 +50,7 @@
         } else if (process.argv.length === 3) {
             console.log(chalk.red('Too few paramaters'));
         } else {
-            if (process.argv.length < 4) {
+            if (process.argv.length === 4) {
                 mode = 'update';
                 sassDir = getArgument(1);
                 cssDir = getArgument(2);
@@ -61,8 +61,10 @@
             }
 
             if ('watch' === mode) {
+                console.log(chalk.green.bold('Watch'));
                 sass.watch(sassDir, cssDir);
             } else if ('update' === mode) {
+                console.log(chalk.green.bold('Update'));
                 sass.update(sassDir, cssDir);
             }
         }
