@@ -6,6 +6,7 @@
  */
 
 var getFiles,
+    getPath,
     compileFile,
     compileFiles;
 
@@ -29,6 +30,22 @@ getFiles = function (path, filter) {
     }
 
     return files;
+};
+
+/**
+ * @param {string} path
+ * @returns {string}
+ */
+getPath = function (path) {
+    'use strict';
+
+    var cwd = process.cwd();
+
+    if (false === /^\\/.test(path)) {
+        path = cwd + '/' + path;
+    }
+
+    return path;
 };
 
 /**
@@ -76,11 +93,7 @@ compileFile = function (sassDir, sassFile, cssDir) {
 compileFiles = function (sassDir, cssDir) {
     'use strict';
 
-    var cwd = process.cwd(),
-        files;
-
-    sassDir = cwd + '/' + sassDir;
-    cssDir = cwd + '/' + cssDir;
+    var files;
 
     files = getFiles(sassDir, function (value) {
         return (/^[^_].+\.scss$/).test(value);
@@ -103,6 +116,9 @@ module.exports = (function () {
          */
         watch: function (sassDir, cssDir) {
             var watch = require('node-watch');
+
+            sassDir = getPath(sassDir);
+            cssDir = getPath(cssDir);
 
             compileFiles(sassDir, cssDir);
 
