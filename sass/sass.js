@@ -44,6 +44,7 @@ compileFile = function (sassDir, sassFile, cssDir) {
     var sass = require('node-sass'),
         path = require('path'),
         fs = require('fs'),
+        chalk = require('chalk'),
         cssFile = path.join(cssDir, path.basename(sassFile, '.scss') + '.css'),
         options = {
             sourceMap: false,
@@ -52,14 +53,14 @@ compileFile = function (sassDir, sassFile, cssDir) {
             success: function (css) {
                 fs.writeFile(cssFile, css, function (err) {
                     if (err) {
-                        console.log('error writing ' + sassFile, err);
+                        console.log(chalk.red('error writing ' + sassFile, err));
                     } else {
-                        console.log('compile ', sassFile);
+                        console.log(chalk.green('compile ', sassFile));
                     }
                 });
             },
             error: function (error, status) {
-                console.log('compile error ', error, status);
+                console.log(chalk.red('compile error ', error, status));
             }
         };
 

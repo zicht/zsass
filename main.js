@@ -33,21 +33,22 @@
         var mode,
             sassDir,
             cssDir,
+            chalk = require('chalk'),
             sass = require('./sass/sass');
 
         if (process.argv.length === 2) {
-            console.log('    _______      _     _      _____                ');
-            console.log('   |___  (_)    | |   | |    / ____|               ');
-            console.log('      / / _  ___| |__ | |_  | (___   __ _ ___ ___  ');
-            console.log('     / / | |/ __| \'_ \\| __|  \\___ \\ / _` / __/ __| ');
-            console.log('    / /__| | (__| | | | |_   ____) | (_| \\__ \\__ \\ ');
-            console.log('   /_____|_|\\___|_| |_|\\__| |_____/ \\__,_|___/___/ ');
-            console.log('                                                   ');
+            console.log(chalk.bold('    _______      _     _      _____                '));
+            console.log(chalk.bold('   |___  (_)    | |   | |    / ____|               '));
+            console.log(chalk.bold('      / / _  ___| |__ | |_  | (___   __ _ ___ ___  '));
+            console.log(chalk.bold('     / / | |/ __| \'_ \\| __|  \\___ \\ / _` / __/ __| '));
+            console.log(chalk.bold('    / /__| | (__| | | | |_   ____) | (_| \\__ \\__ \\ '));
+            console.log(chalk.bold('   /_____|_|\\___|_| |_|\\__| |_____/ \\__,_|___/___/ '));
+            console.log(chalk.bold('                                                   '));
 
-            console.log('Usage:');
-            console.log('zsass <update|watch> <sass-dir> <css-dir>');
+            console.log(chalk.green.bold('Usage:'));
+            console.log(chalk.green('zsass <update|watch> <sass-dir> <css-dir>'));
         } else if (process.argv.length === 3) {
-            console.log('Too few paramaters');
+            console.log(chalk.red('Too few paramaters'));
         } else {
             if (process.argv.length < 4) {
                 mode = 'update';
