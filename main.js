@@ -1,4 +1,4 @@
-/*global require, process*/
+/*global require, process, console*/
 
 /**
  * @author Joppe Aarts <joppe@zicht.nl>
@@ -35,7 +35,18 @@
             cssDir,
             sass = require('./sass/sass');
 
-        if (process.argv.length < 3) {
+        if (process.argv.length === 2) {
+            console.log('    _______      _     _      _____                ');
+            console.log('   |___  (_)    | |   | |    / ____|               ');
+            console.log('      / / _  ___| |__ | |_  | (___   __ _ ___ ___  ');
+            console.log('     / / | |/ __| \'_ \\| __|  \\___ \\ / _` / __/ __| ');
+            console.log('    / /__| | (__| | | | |_   ____) | (_| \\__ \\__ \\ ');
+            console.log('   /_____|_|\\___|_| |_|\\__| |_____/ \\__,_|___/___/ ');
+            console.log('                                                   ');
+
+            console.log('Usage:');
+            console.log('zsass <update|watch> <sass-dir> <css-dir>');
+        } else if (process.argv.length === 3) {
             console.log('Too few paramaters');
         } else {
             if (process.argv.length < 4) {
