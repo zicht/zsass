@@ -34,7 +34,8 @@
             sassDir,
             cssDir,
             chalk = require('chalk'),
-            sass = require('./sass/sass');
+            sass = require('./sass/sass'),
+            pjson = require('./package.json');
 
         if (process.argv.length === 2) {
             console.log(chalk.bold('    _______      _     _      _____                '));
@@ -45,6 +46,7 @@
             console.log(chalk.bold('   /_____|_|\\___|_| |_|\\__| |_____/ \\__,_|___/___/ '));
             console.log(chalk.bold('                                                   '));
 
+            console.log(chalk.green.bold('Zicht Sass version ' + pjson.version));
             console.log(chalk.green.bold('Usage:'));
             console.log(chalk.green('zsass <update|watch> <sass-dir> <css-dir>'));
         } else if (process.argv.length === 3) {
