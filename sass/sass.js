@@ -41,7 +41,7 @@ getPath = function (path) {
 
     var cwd = process.cwd();
 
-    if (false === /^\\/.test(path)) {
+    if (false === /^\//.test(path)) {
         path = cwd + '/' + path;
     }
 
