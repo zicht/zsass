@@ -4,7 +4,7 @@
   "description": "Wrapper for node-sass",
   "main": "./main.js",
   "bin": {
-      "node-sass-watch": "./bin/zsass"
+      "zsass": "./bin/zsass"
   },
   "dependencies": {
     "node-watch": "^0.3.4",
