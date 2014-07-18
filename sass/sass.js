@@ -134,6 +134,9 @@ module.exports = (function () {
          * @param {string} cssDir
          */
         update: function (sassDir, cssDir) {
+            sassDir = getPath(sassDir);
+            cssDir = getPath(cssDir);
+
             compileFiles(sassDir, cssDir);
         }
     };
