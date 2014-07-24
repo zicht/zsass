@@ -39,10 +39,15 @@ getFiles = function (path, filter) {
 getPath = function (path) {
     'use strict';
 
-    var cwd = process.cwd();
+    var fs = require('fs'),
+        cwd = process.cwd();
 
     if (false === /^\//.test(path)) {
         path = cwd + '/' + path;
+    }
+
+    if (!fs.existsSync(path)) {
+        throw 'Path "' + path + '" does not exist';
     }
 
     return path;
@@ -115,16 +120,21 @@ module.exports = (function () {
          * @param {string} cssDir
          */
         watch: function (sassDir, cssDir) {
-            var watch = require('node-watch');
+            var watch = require('node-watch'),
+                chalk = require('chalk');
 
-            sassDir = getPath(sassDir);
-            cssDir = getPath(cssDir);
+            try {
+                sassDir = getPath(sassDir);
+                cssDir = getPath(cssDir);
 
-            compileFiles(sassDir, cssDir);
-
-            watch(sassDir, function () {
                 compileFiles(sassDir, cssDir);
-            });
+
+                watch(sassDir, function () {
+                    compileFiles(sassDir, cssDir);
+                });
+            } catch (exception) {
+                console.log(chalk.red(exception));
+            }
         },
 
         /**
@@ -134,10 +144,16 @@ module.exports = (function () {
          * @param {string} cssDir
          */
         update: function (sassDir, cssDir) {
-            sassDir = getPath(sassDir);
-            cssDir = getPath(cssDir);
+            var chalk = require('chalk');
 
-            compileFiles(sassDir, cssDir);
+            try {
+                sassDir = getPath(sassDir);
+                cssDir = getPath(cssDir);
+
+                compileFiles(sassDir, cssDir);
+            } catch (exception) {
+                console.log(chalk.red(exception));
+            }
         }
     };
 }());
