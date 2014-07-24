@@ -64,6 +64,7 @@
 
             if ('watch' === mode) {
                 console.log(chalk.green.bold('Watch'));
+                console.log(chalk.white('Press Ctrl+c to end'));
                 sass.watch(sassDir, cssDir);
             } else if ('update' === mode) {
                 console.log(chalk.green.bold('Update'));
