@@ -70,7 +70,8 @@ compileFile = function (sassDir, sassFile, cssDir) {
         cssFile = path.join(cssDir, path.basename(sassFile, '.scss') + '.css'),
         options = {
             sourceMap: false,
-            sourceComments: 'none',
+            sourceComments: false,
+            outputStyle: 'compressed',
             file: sassDir + '/' + sassFile,
             success: function (css) {
                 fs.writeFile(cssFile, css, function (err) {
