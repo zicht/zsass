@@ -21,13 +21,25 @@ getFiles = function (path, filter) {
     'use strict';
 
     var fs = require('fs'),
-        files;
+        files,
+        subdirs;
 
     files = fs.readdirSync(path);
+
+    subdirs = files.filter(function(f) {
+        return fs.lstatSync(path + '/' + f).isDirectory();
+    });
+
+    subdirs.forEach(function(f) {
+        getFiles(path + '/' + f, filter).forEach(function(file) {
+            files.push(f + '/' + file);
+        });
+    });
 
     if (undefined !== filter) {
         files = files.filter(filter);
     }
+
 
     return files;
 };
@@ -64,10 +76,9 @@ compileFile = function (sassDir, sassFile, cssDir) {
     'use strict';
 
     var sass = require('node-sass'),
-        path = require('path'),
         fs = require('fs'),
         chalk = require('chalk'),
-        cssFile = path.join(cssDir, path.basename(sassFile, '.scss') + '.css'),
+        cssFile = cssDir + '/' + sassFile.replace(/scss$/, 'css'),
         options = {
             sourceMap: false,
             sourceComments: false,
@@ -104,6 +115,8 @@ compileFiles = function (sassDir, cssDir) {
     files = getFiles(sassDir, function (value) {
         return (/^[^_].+\.scss$/).test(value);
     });
+
+    console.log(files);
 
     files.forEach(function (sassFile) {
         compileFile(sassDir, sassFile, cssDir);
