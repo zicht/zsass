@@ -116,8 +116,6 @@ compileFiles = function (sassDir, cssDir) {
         return (/^[^_].+\.scss$/).test(value);
     });
 
-    console.log(files);
-
     files.forEach(function (sassFile) {
         compileFile(sassDir, sassFile, cssDir);
     });
