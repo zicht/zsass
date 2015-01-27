@@ -5,81 +5,123 @@
  * @copyright Zicht Online <http://zicht.nl>
  */
 
-var getFiles,
-    getPath,
-    compileFile,
-    compileFiles;
-
-/**
- * Get all files with a given extension in a given directory
- *
- * @param {string} path
- * @param {Function} [filter]
- * @returns {Array}
- */
-getFiles = function (path, filter) {
+module.exports = (function () {
     'use strict';
 
     var fs = require('fs'),
-        files,
-        subdirs;
-
-    files = fs.readdirSync(path);
-
-    subdirs = files.filter(function(f) {
-        return fs.lstatSync(path + '/' + f).isDirectory();
-    });
-
-    subdirs.forEach(function(f) {
-        getFiles(path + '/' + f, filter).forEach(function(file) {
-            files.push(f + '/' + file);
-        });
-    });
-
-    if (undefined !== filter) {
-        files = files.filter(filter);
-    }
-
-
-    return files;
-};
-
-/**
- * @param {string} path
- * @returns {string}
- */
-getPath = function (path) {
-    'use strict';
-
-    var fs = require('fs'),
-        cwd = process.cwd();
-
-    if (false === /^\//.test(path)) {
-        path = cwd + '/' + path;
-    }
-
-    if (!fs.existsSync(path)) {
-        throw 'Path "' + path + '" does not exist';
-    }
-
-    return path;
-};
-
-/**
- * Compile a scss file to css file
- *
- * @param {string} sassDir
- * @param {string} sassFile
- * @param {string} cssDir
- */
-compileFile = function (sassDir, sassFile, cssDir) {
-    'use strict';
-
-    var sass = require('node-sass'),
-        fs = require('fs'),
+        sass = require('node-sass'),
+        watch = require('node-watch'),
         chalk = require('chalk'),
-        cssFile = cssDir + '/' + sassFile.replace(/scss$/, 'css'),
-        options = {
+        getFiles,
+        getAbsolutePath,
+        getRelativePath,
+        compileFile,
+        compileFiles,
+        ensurePath;
+
+    /**
+     * Get all files with a given extension in a given directory
+     *
+     * @param {string} path
+     * @param {Function} [filter]
+     * @returns {Array}
+     */
+    getFiles = function (path, filter) {
+        var files,
+            subdirs;
+
+        files = fs.readdirSync(path);
+
+        subdirs = files.filter(function (f) {
+            return fs.lstatSync(path + '/' + f).isDirectory();
+        });
+
+        subdirs.forEach(function(f) {
+            getFiles(path + '/' + f, filter).forEach(function(file) {
+                files.push(f + '/' + file);
+            });
+        });
+
+        if (undefined !== filter) {
+            files = files.filter(filter);
+        }
+
+        return files;
+    };
+
+    /**
+     * @param {string} path
+     * @returns {string}
+     */
+    getAbsolutePath = function (path) {
+        var cwd = process.cwd();
+
+        if (false === /^\//.test(path)) {
+            path = cwd + '/' + path;
+        }
+
+        if (!fs.existsSync(path)) {
+            throw 'Path "' + path + '" does not exist';
+        }
+
+        return path;
+    };
+
+    /**
+     * @param {string} base
+     * @param {string} filepath
+     * @returns {string}
+     */
+    getRelativePath = function (base, filepath) {
+        var path;
+
+        // remove the file part
+        path = filepath.replace(/\/[^\/]+\.s?css$/g, '');
+
+        // remove the base
+        path = path.replace(base, '');
+
+        // remove the leading slash
+        path = path.replace(/^\//, '');
+
+        return path;
+    };
+
+    /**
+     * @param {string} base
+     * @param {string} filepath
+     */
+    ensurePath = function (base, filepath) {
+        var relativePath = getRelativePath(base, filepath),
+            dirs = relativePath.split('/'),
+            target = base;
+
+        if (false === fs.existsSync(base + '/' + relativePath)) {
+            dirs = relativePath.split('/');
+
+            dirs.forEach(function (dir) {
+                target += '/' + dir;
+
+                if (!fs.existsSync(target)) {
+                    fs.mkdirSync(target);
+                }
+            });
+        }
+    };
+
+    /**
+     * Compile a scss file to css file
+     *
+     * @param {string} sassDir
+     * @param {string} sassFile
+     * @param {string} cssDir
+     */
+    compileFile = function (sassDir, sassFile, cssDir) {
+        var cssFile = cssDir + '/' + sassFile.replace(/scss$/, 'css');
+
+        ensurePath(cssDir, cssFile);
+
+        sass.render({
             sourceMap: false,
             sourceComments: false,
             outputStyle: 'compressed',
@@ -96,33 +138,26 @@ compileFile = function (sassDir, sassFile, cssDir) {
             error: function (error, status) {
                 console.log(chalk.red('compile error ', error, status));
             }
-        };
+        });
+    };
 
-    sass.render(options);
-};
+    /**
+     * Compile all scss files in a given directory
+     *
+     * @param {string} sassDir
+     * @param {string} cssDir
+     */
+    compileFiles = function (sassDir, cssDir) {
+        var files;
 
-/**
- * Compile all scss files in a given directory
- *
- * @param {string} sassDir
- * @param {string} cssDir
- */
-compileFiles = function (sassDir, cssDir) {
-    'use strict';
+        files = getFiles(sassDir, function (value) {
+            return (/^[^_]+\.scss$/).test(value);
+        });
 
-    var files;
-
-    files = getFiles(sassDir, function (value) {
-        return (/^[^_].+\.scss$/).test(value);
-    });
-
-    files.forEach(function (sassFile) {
-        compileFile(sassDir, sassFile, cssDir);
-    });
-};
-
-module.exports = (function () {
-    'use strict';
+        files.forEach(function (sassFile) {
+            compileFile(sassDir, sassFile, cssDir);
+        });
+    };
 
     return {
         /**
@@ -132,12 +167,9 @@ module.exports = (function () {
          * @param {string} cssDir
          */
         watch: function (sassDir, cssDir) {
-            var watch = require('node-watch'),
-                chalk = require('chalk');
-
             try {
-                sassDir = getPath(sassDir);
-                cssDir = getPath(cssDir);
+                sassDir = getAbsolutePath(sassDir);
+                cssDir = getAbsolutePath(cssDir);
 
                 compileFiles(sassDir, cssDir);
 
@@ -156,11 +188,9 @@ module.exports = (function () {
          * @param {string} cssDir
          */
         update: function (sassDir, cssDir) {
-            var chalk = require('chalk');
-
             try {
-                sassDir = getPath(sassDir);
-                cssDir = getPath(cssDir);
+                sassDir = getAbsolutePath(sassDir);
+                cssDir = getAbsolutePath(cssDir);
 
                 compileFiles(sassDir, cssDir);
             } catch (exception) {
