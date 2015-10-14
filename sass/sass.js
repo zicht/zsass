@@ -125,18 +125,18 @@ module.exports = (function () {
             sourceMap: false,
             sourceComments: false,
             outputStyle: 'compressed',
-            file: sassDir + '/' + sassFile,
-            success: function (css) {
-                fs.writeFile(cssFile, css, function (err) {
+            file: sassDir + '/' + sassFile
+        }, function (error, result) {
+            if (error) {
+                console.log(chalk.red('compile error ', error, status));
+            } else {
+                fs.writeFile(cssFile, result.css.toString(), function (err) {
                     if (err) {
                         console.log(chalk.red('error writing ' + sassFile, err));
                     } else {
                         console.log(chalk.green('compile ', sassFile));
                     }
                 });
-            },
-            error: function (error, status) {
-                console.log(chalk.red('compile error ', error, status));
             }
         });
     };
