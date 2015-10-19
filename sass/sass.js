@@ -128,7 +128,7 @@ module.exports = (function () {
             file: sassDir + '/' + sassFile
         }, function (error, result) {
             if (error) {
-                console.log(chalk.red('compile error ', error, status));
+                console.log(chalk.red('compile error ', error));
             } else {
                 fs.writeFile(cssFile, result.css.toString(), function (err) {
                     if (err) {
