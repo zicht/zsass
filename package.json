@@ -1,21 +1,22 @@
 {
-  "name": "ZichtNodeSassWatch",
-  "version": "2.0.0-beta.1",
-  "description": "Wrapper for node-sass",
-  "main": "./main.js",
-  "bin": {
-      "zsass": "./bin/zsass"
-  },
-  "dependencies": {
-    "node-watch": "^0.3.4",
-    "node-sass": "~3",
-    "chalk": "~0.4.0"
-  },
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git@dev3:public_html/ZichtNodeSassWatch"
-  },
-  "author": "Joppe Aarts",
-  "license": "MIT"
+    "name": "ZichtNodeSassWatch",
+    "version": "2.0.0-beta.1",
+    "description": "Wrapper for node-sass",
+    "main": "./main.js",
+    "bin": {
+        "zsass": "./bin/zsass"
+    },
+    "dependencies": {
+        "chalk": "~0.4.0",
+        "minimist": "^1.2.0",
+        "node-sass": "~3",
+        "node-watch": "^0.3.4"
+    },
+    "devDependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "git@dev3:public_html/ZichtNodeSassWatch"
+    },
+    "author": "Joppe Aarts",
+    "license": "MIT"
 }
