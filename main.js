@@ -8,26 +8,21 @@
 (function () {
     'use strict';
 
-    var getArgument;
+    var argv = require('minimist')(process.argv.slice(2), {
+            string: 'outputStyle',
+            boolean: ['sourceMap', 'sourceComments'],
+            alias: {
+                s: 'outputStyle',
+                m: 'sourceMap',
+                c: 'sourceComments'
+            },
+            default: {
+                outputStyle: 'compressed',
+                sourceMap: false,
+                sourceComments: false
+            }
 
-    /**
-     * Get an cli argument at a given position
-     *
-     * @param {number} position
-     * @param {string} defVal
-     * @returns {string}
-     */
-    getArgument = function (position, defVal) {
-        var val = defVal;
-
-        position += 1; // the first argument is "node" and the second is "watch.js"
-
-        if (process.argv.length >= position) {
-            val = process.argv[position];
-        }
-
-        return val;
-    };
+        });
 
     (function () {
         var mode,
@@ -35,9 +30,14 @@
             cssDir,
             chalk = require('chalk'),
             sass = require('./sass/sass'),
-            pjson = require('./package.json');
+            pjson = require('./package.json'),
+            options = {
+                sourceMap: argv.sourceMap,
+                sourceComments: argv.sourceComments,
+                outputStyle: argv.outputStyle
+            };
 
-        if (process.argv.length === 2) {
+        if (0 === argv._.length) {
             console.log(chalk.bold('    _______      _     _      _____                '));
             console.log(chalk.bold('   |___  (_)    | |   | |    / ____|               '));
             console.log(chalk.bold('      / / _  ___| |__ | |_  | (___   __ _ ___ ___  '));
@@ -48,27 +48,28 @@
 
             console.log(chalk.green.bold('Zicht Sass version ' + pjson.version));
             console.log(chalk.green.bold('Usage:'));
-            console.log(chalk.green('zsass <update|watch> <sass-dir> <css-dir>'));
-        } else if (process.argv.length === 3) {
+            console.log(chalk.green('zsass [update|watch] <sass-dir> <css-dir> [--sourceMap=true|false] [--sourceComments=true|false] [--outputStyle=style]'));
+        } else if (1 === argv._.length) {
             console.log(chalk.red('Too few paramaters'));
         } else {
-            if (process.argv.length === 4) {
+            if (2 === argv._.length) {
                 mode = 'update';
-                sassDir = getArgument(1);
-                cssDir = getArgument(2);
+                sassDir = argv._[0];
+                cssDir = argv._[1];
             } else {
-                mode = getArgument(1);
-                sassDir = getArgument(2);
-                cssDir = getArgument(3);
+                mode = argv._[0];
+                sassDir = argv._[1];
+                cssDir = argv._[2];
             }
+            console.log(mode, sassDir, cssDir);
 
             if ('watch' === mode) {
                 console.log(chalk.green.bold('Watch'));
                 console.log(chalk.white('Press Ctrl+c to end'));
-                sass.watch(sassDir, cssDir);
+                sass.watch(sassDir, cssDir, options);
             } else if ('update' === mode) {
                 console.log(chalk.green.bold('Update'));
-                sass.update(sassDir, cssDir);
+                sass.update(sassDir, cssDir, options);
             }
         }
     }());

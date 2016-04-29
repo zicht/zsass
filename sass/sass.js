@@ -115,16 +115,17 @@ module.exports = (function () {
      * @param {string} sassDir
      * @param {string} sassFile
      * @param {string} cssDir
+     * @param {Object} options
      */
-    compileFile = function (sassDir, sassFile, cssDir) {
+    compileFile = function (sassDir, sassFile, cssDir, options) {
         var cssFile = cssDir + '/' + sassFile.replace(/scss$/, 'css');
 
         ensurePath(cssDir, cssFile);
 
         sass.render({
-            sourceMap: false,
-            sourceComments: false,
-            outputStyle: 'compressed',
+            sourceMap: options.sourceMap,
+            sourceComments: options.sourceComments,
+            outputStyle: options.outputStyle,
             file: sassDir + '/' + sassFile
         }, function (error, result) {
             if (error) {
@@ -146,8 +147,9 @@ module.exports = (function () {
      *
      * @param {string} sassDir
      * @param {string} cssDir
+     * @param {Object} options
      */
-    compileFiles = function (sassDir, cssDir) {
+    compileFiles = function (sassDir, cssDir, options) {
         var files;
 
         files = getFiles(sassDir, function (value) {
@@ -155,7 +157,7 @@ module.exports = (function () {
         });
 
         files.forEach(function (sassFile) {
-            compileFile(sassDir, sassFile, cssDir);
+            compileFile(sassDir, sassFile, cssDir, options);
         });
     };
 
@@ -165,16 +167,17 @@ module.exports = (function () {
          *
          * @param {string} sassDir
          * @param {string} cssDir
+         * @param {Object} options
          */
-        watch: function (sassDir, cssDir) {
+        watch: function (sassDir, cssDir, options) {
             try {
                 sassDir = getAbsolutePath(sassDir);
                 cssDir = getAbsolutePath(cssDir);
 
-                compileFiles(sassDir, cssDir);
+                compileFiles(sassDir, cssDir, options);
 
                 watch(sassDir, function () {
-                    compileFiles(sassDir, cssDir);
+                    compileFiles(sassDir, cssDir, options);
                 });
             } catch (exception) {
                 console.log(chalk.red(exception));
@@ -186,13 +189,14 @@ module.exports = (function () {
          *
          * @param {string} sassDir
          * @param {string} cssDir
+         * @param {Object} options
          */
-        update: function (sassDir, cssDir) {
+        update: function (sassDir, cssDir, options) {
             try {
                 sassDir = getAbsolutePath(sassDir);
                 cssDir = getAbsolutePath(cssDir);
 
-                compileFiles(sassDir, cssDir);
+                compileFiles(sassDir, cssDir, options);
             } catch (exception) {
                 console.log(chalk.red(exception));
             }
