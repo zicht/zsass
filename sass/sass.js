@@ -9,6 +9,7 @@ module.exports = (function () {
     'use strict';
 
     var fs = require('fs'),
+        path = require('path'),
         sass = require('node-sass'),
         watch = require('node-watch'),
         chalk = require('chalk'),
@@ -152,9 +153,14 @@ module.exports = (function () {
     compileFiles = function (sassDir, cssDir, options) {
         var files;
 
-        files = getFiles(sassDir, function (value) {
-            return (/^[^_]+\.scss$/).test(value);
-        });
+        if (fs.statSync(sassDir).isFile()) {
+            files = [path.basename(sassDir)];
+            sassDir = path.dirname(sassDir); //.replace(/[^\/]+$/, '');
+        } else {
+            files = getFiles(sassDir, function (value) {
+                return (/^[^_]+\.scss$/).test(value);
+            });
+        }
 
         files.forEach(function (sassFile) {
             compileFile(sassDir, sassFile, cssDir, options);
