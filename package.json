@@ -1,10 +1,10 @@
 {
-    "name": "ZichtNodeSassWatch",
+    "name": "zsass",
     "version": "3.0.0-beta.1",
     "description": "Wrapper for node-sass",
     "main": "./main.js",
     "bin": {
-        "zsass": "./bin/zsass"
+        "zsass": "bin/zsass"
     },
     "dependencies": {
         "chalk": "~0.5.1",
